@@ -1,19 +1,20 @@
 *** Settings ***
 Library  SeleniumLibrary
+
+Suite Setup  Set Selenium Timeout  10
+
 Test Setup  Open url
 #Test Teardown  Close Browser
 
 
 *** Variables ***
-${id_create_account_error}  //*[@id="create_account_error"]/ol/li
-${titleLogin}  Login - My Store
-${titleMyAccount}  My account - My Store
-${invalid_email}  Invalid email address.
-${id_error}  //*[@id="center_column"]/div/p
-${valid email}  test1@today.com
-${error_create}  There are 8 errors
-${EmailAlready}  An account using this email address has already been registered. Please enter a valid password or request a new one.
-${Locator_already}  //*[@id="create_account_error"]/ol/li
+${idCreateAccountError}  //*[@id="create_account_error"]/ol/li
+${invalidEmail}  Invalid email address.
+${idError}  //*[@id="center_column"]/div/p
+${validEmail}  test1@today.com
+${errorCreate}  There are 8 errors
+${emailAlready}  An account using this email address has already been registered. Please enter a valid password or request a new one.
+${locatorAlready}  //*[@id="create_account_error"]/ol/li
 
 
 *** Keywords ***
@@ -29,6 +30,7 @@ Click Button Register
 
 Check message should be
     [Arguments]  ${idLocator}  ${massage}
+   !!! Wait Until Element Is Visible  ${idLocator} 
     Element Text Should Be  ${idLocator}  ${massage}
 
 Input email
@@ -57,10 +59,10 @@ Password
 
 Select Birthday
     [Arguments]  ${datelocator}  ${date}
-    Select From List By Value  ${datelocator}  ${date}
+    Wait Until Element Is Visible  ${datelocator}   
+    Select From List By Value  ${datelocator}  ${date} 
 
-Input address
-    [Arguments]  ${address}
+Input address with "${address}" and "${address1}"
     Input Text  name=address1  ${address} 
 
 Input city
@@ -82,18 +84,27 @@ Input future reference.
 Input zip code
     [Arguments]  ${code}
     Input Text  name=postcode  ${code}
+
+Should show invalid email error
+   Wait Until Element Contains  ${id_create_account_error}  ${invalid_email} 
+
+Should show title name with "${titleName}"
+    Check title name    ${titleName}
+
 *** Test Cases ***
 
 Create account without input email
-     Check title name    ${titleLogin}
+     Should show title name with "Login - My Store"
      Click button create an account 
-     Wait Until Element Is Visible   ${id_create_account_error}  10
-     Check message should be    ${id_create_account_error}    ${invalid_email}
+     Should show invalid email error  
+    #  Wait Until Element Is Visible   ${id_create_account_error}  10
+    #  Check message should be    ${id_create_account_error}    ${invalid_email}
 
 Create account with invalid form
     Check title name    ${titleLogin}
     Input email    id=email_create    haha@mci,co
     Click button create an account 
+    Sleep  10
     Wait Until Element Is Visible   ${id_create_account_error}  10
     Check message should be    ${id_create_account_error}    ${invalid_email}
 
@@ -124,7 +135,8 @@ Create account input all required field
     Select Birthday      id=days    3
     Select Birthday      id=months    4
     Select Birthday    id=years    1999
-    Input address    AAAA
+    Input address with "AAAAA" 
+    Input address with "AAAA" and "BBBB" 
     Input city    BBB
     Select State    Alabama
     Input zip code    11111
@@ -132,7 +144,7 @@ Create account input all required field
     Input future reference.    future
     Click button Register 
     Set Browser Implicit Wait  10
-    Check title name    ${titleMyAccount}
+    Should show title name with "My account - My Store"
 
 Create account with same email
     Check title name    ${titleLogin}

@@ -4,14 +4,12 @@ Library  SeleniumLibrary
 Suite Setup  Set Selenium Timeout  10
 
 Test Setup  Open url
-#Test Teardown  Close Browser
+Test Teardown  Close Browser
 
 
 *** Variables ***
 ${idCreateAccountError}  //*[@id="create_account_error"]/ol/li
-#${invalidEmail}  Invalid email address.
 ${emailAlready}  An account using this email address has already been registered. Please enter a valid password or request a new one.
-${locatorAlready}  //*[@id="create_account_error"]/ol/li
 
 
 *** Keywords ***
@@ -98,6 +96,9 @@ Should show title name with "${titleName}"
 Should show text error create
     Wait Until Element Contains  //*[@id="center_column"]/div/p  There are 8 errors
 
+Should show error email already
+    Wait Until Element Contains   ${id_create_account_error}  ${EmailAlready}
+
 *** Test Cases ***
 
 Create account without input email
@@ -114,20 +115,20 @@ Create account with invalid form
 
 Create account with valid form
     Should show title name with "Login - My Store"
-    Input email with "test3@today.com"
+    Input email with "test4@today.com"
     Click button create an account
     Should show title name with "Login - My Store"
 
 Create account not input in all required field
     Should show title name with "Login - My Store"
-    Input email with "test3@today.com"
+    Input email with "test4@today.com"
     Click button create an account
     Click button Register 
     Should show text error create
     
 Scenario: Create account input all required field   
     Should show title name with "Login - My Store"
-    Input email with "test3@today.com"
+    Input email with "test4@today.com"
     Click button create an account
     Choose title with "2" 
     Input firstname with "sky"
@@ -147,10 +148,9 @@ Scenario: Create account input all required field
 
 Create account with same email
     Should show title name with "Login - My Store"
-    Input email    id=email_create    ${valid email}
+    Input email with "test3@today.com"
     Click button create an account
-    Wait Until Element Is Visible   ${id_create_account_error}  10
-    Check message should be    ${Locator_already}  ${EmailAlready}
+    Should show error email already
 
 
     

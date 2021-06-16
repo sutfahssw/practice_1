@@ -10,9 +10,7 @@ Test Setup  Open url
 *** Variables ***
 ${idCreateAccountError}  //*[@id="create_account_error"]/ol/li
 #${invalidEmail}  Invalid email address.
-${idError}  //*[@id="center_column"]/div/p
 ${validEmail}  test1@today.com
-${errorCreate}  There are 8 errors
 ${emailAlready}  An account using this email address has already been registered. Please enter a valid password or request a new one.
 ${locatorAlready}  //*[@id="create_account_error"]/ol/li
 
@@ -87,7 +85,13 @@ Should show invalid email error
    Wait Until Element Contains  ${id_create_account_error}  ${invalid_email} 
 
 Should show title name with "${titleName}"
-    Check title name    ${titleName}
+    Title Should Be    ${titleName}
+
+Should show page input information
+    Wait Until Element Contains  //*[@id="account-creation_form"]/div[1]/h3  Your personal information  
+
+Should show text error create
+    Wait Until Element Contains  //*[@id="center_column"]/div/p  There are 8 errors
 
 *** Test Cases ***
 
@@ -110,16 +114,14 @@ Create account with valid form
     Should show title name with "Login - My Store"
 
 Create account not input in all required field
-    Check title name    ${titleLogin}
-    Input email    id=email_create    ${valid email}
+    Should show title name with "Login - My Store"
+    Input email with "test3@today.com"
     Click button create an account
-    Set Browser Implicit Wait  15
     Click button Register 
-    Wait Until Page Contains Element  ${id_error}   15
-    Check message should be    ${id_error}    ${error_create}
+    Should show text error create
     
 Create account input all required field
-    Check title name    ${titleLogin}
+    Should show title name with "Login - My Store"
     Input email    id=email_create    ${valid email}
     Click button create an account
     Set Browser Implicit Wait  15
@@ -142,7 +144,7 @@ Create account input all required field
     Should show title name with "My account - My Store"
 
 Create account with same email
-    Check title name    ${titleLogin}
+    Should show title name with "Login - My Store"
     Input email    id=email_create    ${valid email}
     Click button create an account
     Wait Until Element Is Visible   ${id_create_account_error}  10

@@ -9,7 +9,7 @@ Test Setup  Open url
 
 *** Variables ***
 ${idCreateAccountError}  //*[@id="create_account_error"]/ol/li
-${invalidEmail}  Invalid email address.
+#${invalidEmail}  Invalid email address.
 ${idError}  //*[@id="center_column"]/div/p
 ${validEmail}  test1@today.com
 ${errorCreate}  There are 8 errors
@@ -38,9 +38,6 @@ Check message should be
 Input email with "${email}"
     Input text  id=email_create  ${email}
 
-Check title name
-    [Arguments]  ${nametitle}
-    Title Should Be  ${nametitle}
 
 Choose Title
     [Arguments]  ${gender}
@@ -107,10 +104,10 @@ Create account with invalid form
     Should show invalid email error
 
 Create account with valid form
-    Check title name    ${titleLogin}
-    Input email    id=email_create    ${valid email}
+    Should show title name with "Login - My Store"
+    Input email with "test3@today.com"
     Click button create an account
-    Check title name    ${titleLogin}
+    Should show title name with "Login - My Store"
 
 Create account not input in all required field
     Check title name    ${titleLogin}

@@ -1,10 +1,11 @@
 *** Settings ***
 Library  SeleniumLibrary
 
-Suite Setup  Set Selenium Timeout  10
+Suite Setup  Suite Setup
 
-Test Setup  Open url
-Test Teardown  Close Browser
+Test Setup  Reload Page
+
+Suite Teardown  Close Browser
 
 
 *** Variables ***
@@ -13,6 +14,10 @@ ${emailAlready}  An account using this email address has already been registered
 
 
 *** Keywords ***
+Suite Setup
+    Open url
+    Set Selenium Timeout  10
+
 Open url
     Open Browser  http://automationpractice.com/index.php?controller=authentication&back=my-account#account-creation  gc
     Maximize Browser Window
@@ -52,15 +57,15 @@ Input Password with "${password}"
     Input Password  id=passwd  ${password}
 
 Select Birthday date with "${date}"
-    #Wait Until Element Is Visible  id=days   
+    Wait Until Element Is Visible  id=uniform-days   
     Select From List By Value  id=days  ${date} 
 
 Select Birthday month with "${months}"
-    #Wait Until Element Is Visible  id=months   15
+    Wait Until Element Is Visible  id=uniform-months   
     Select From List By Value  id=months  ${months}
 
 Select Birthday yesr with "${years}"
-    #Wait Until Element Is Visible  id=years   
+    Wait Until Element Is Visible  id=uniform-years   
     Select From List By Value  id=years  ${years}  
 
 Input address with "${address}" 
@@ -68,7 +73,7 @@ Input address with "${address}"
     Input Text  name=address1  ${address} 
 
 Input city with "${city}"
-    Wait Until Element Is Visible  id=address1
+    Wait Until Element Is Visible  id=city
     Input Text  name=city  ${city}
 
 Select State with "${state}"
@@ -88,7 +93,7 @@ Input zip code with "${code}"
     Input Text  name=postcode  ${code}
 
 Should show invalid email error
-   Wait Until Element Contains  ${id_create_account_error}  ${invalid_email} 
+   Wait Until Element Contains  ${id_create_account_error}  Invalid email address. 
 
 Should show title name with "${titleName}"
     Title Should Be    ${titleName}
@@ -143,8 +148,8 @@ Scenario: Create account input all required field
     Input zip code with "11111"
     Input mobile phone with "012345678"
     Input future reference with "future"
-    Click button Register 
-    Should show title name with "My account - My Store"
+    #Click button Register 
+    #Should show title name with "My account - My Store"
 
 Scenario: Create account with same email
     Should show title name with "Login - My Store"

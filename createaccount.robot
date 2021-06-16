@@ -23,19 +23,20 @@ Open url
     Maximize Browser Window
 
 Click button create an account 
+    Wait Until Element Is Visible   id=SubmitCreate
     Click Button  id=SubmitCreate
 
 Click Button Register
+    Wait Until Element Is Visible   id=submitAccount
     Click Button  id=submitAccount
 
 Check message should be
     [Arguments]  ${idLocator}  ${massage}
-   !!! Wait Until Element Is Visible  ${idLocator} 
+    Wait Until Element Is Visible  ${idLocator} 
     Element Text Should Be  ${idLocator}  ${massage}
 
-Input email
-    [Arguments]  ${idLocator}  ${email}
-    Input text  ${idLocator}  ${email}
+Input email with "${email}"
+    Input text  id=email_create  ${email}
 
 Check title name
     [Arguments]  ${nametitle}
@@ -62,7 +63,7 @@ Select Birthday
     Wait Until Element Is Visible  ${datelocator}   
     Select From List By Value  ${datelocator}  ${date} 
 
-Input address with "${address}" and "${address1}"
+Input address with "${address}" 
     Input Text  name=address1  ${address} 
 
 Input city
@@ -94,19 +95,16 @@ Should show title name with "${titleName}"
 *** Test Cases ***
 
 Create account without input email
-     Should show title name with "Login - My Store"
-     Click button create an account 
-     Should show invalid email error  
-    #  Wait Until Element Is Visible   ${id_create_account_error}  10
-    #  Check message should be    ${id_create_account_error}    ${invalid_email}
+    Should show title name with "Login - My Store"
+    Click button create an account 
+    Should show invalid email error  
+
 
 Create account with invalid form
-    Check title name    ${titleLogin}
-    Input email    id=email_create    haha@mci,co
+    Should show title name with "Login - My Store"
+    Input email with "haha@mci,co"
     Click button create an account 
-    Sleep  10
-    Wait Until Element Is Visible   ${id_create_account_error}  10
-    Check message should be    ${id_create_account_error}    ${invalid_email}
+    Should show invalid email error
 
 Create account with valid form
     Check title name    ${titleLogin}

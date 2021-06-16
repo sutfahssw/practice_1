@@ -101,25 +101,25 @@ Should show error email already
 
 *** Test Cases ***
 
-Create account without input email
+Scenario: Create account without input email
     Should show title name with "Login - My Store"
     Click button create an account 
     Should show invalid email error  
 
 
-Create account with invalid form
+Scenario: Create account with invalid form
     Should show title name with "Login - My Store"
     Input email with "haha@mci,co"
     Click button create an account 
     Should show invalid email error
 
-Create account with valid form
+Scenario: Create account with valid form
     Should show title name with "Login - My Store"
     Input email with "test4@today.com"
     Click button create an account
     Should show title name with "Login - My Store"
 
-Create account not input in all required field
+Scenario: Create account not input in all required field
     Should show title name with "Login - My Store"
     Input email with "test4@today.com"
     Click button create an account
@@ -146,7 +146,7 @@ Scenario: Create account input all required field
     Click button Register 
     Should show title name with "My account - My Store"
 
-Create account with same email
+Scenario: Create account with same email
     Should show title name with "Login - My Store"
     Input email with "test3@today.com"
     Click button create an account

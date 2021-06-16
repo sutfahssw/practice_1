@@ -10,7 +10,6 @@ Test Setup  Open url
 *** Variables ***
 ${idCreateAccountError}  //*[@id="create_account_error"]/ol/li
 #${invalidEmail}  Invalid email address.
-${validEmail}  test1@today.com
 ${emailAlready}  An account using this email address has already been registered. Please enter a valid password or request a new one.
 ${locatorAlready}  //*[@id="create_account_error"]/ol/li
 
@@ -34,51 +33,60 @@ Check message should be
     Element Text Should Be  ${idLocator}  ${massage}
 
 Input email with "${email}"
+    Wait Until Element Is Visible  id=email_create
     Input text  id=email_create  ${email}
 
 
-Choose Title
-    [Arguments]  ${gender}
+Choose title with "${gender}"
+    Wait Until Element Is Visible  class=radio-inline
     Select Radio Button  id_gender  ${gender}
 
-Input firstname
-    [Arguments]  ${firstname}
+Input firstname with "${firstname}"
+    Wait Until Element Is Visible  id=customer_firstname
     Input Text  name=customer_firstname  ${firstname}
 
-Input lastname
-    [Arguments]  ${lastname}
+Input lastname with "${lastname}"
+    Wait Until Element Is Visible  id=customer_lastname
     Input Text  name=customer_lastname  ${lastname}
 
-Password   
-    [Arguments]   ${password}  
+Input Password with "${password}"
+    Wait Until Element Is Visible  id=passwd
     Input Password  id=passwd  ${password}
 
-Select Birthday
-    [Arguments]  ${datelocator}  ${date}
-    Wait Until Element Is Visible  ${datelocator}   
-    Select From List By Value  ${datelocator}  ${date} 
+Select Birthday date with "${date}"
+    #Wait Until Element Is Visible  id=days   
+    Select From List By Value  id=days  ${date} 
+
+Select Birthday month with "${months}"
+    #Wait Until Element Is Visible  id=months   15
+    Select From List By Value  id=months  ${months}
+
+Select Birthday yesr with "${years}"
+    #Wait Until Element Is Visible  id=years   
+    Select From List By Value  id=years  ${years}  
 
 Input address with "${address}" 
+    Wait Until Element Is Visible  id=address1
     Input Text  name=address1  ${address} 
 
-Input city
-    [Arguments]  ${city}
+Input city with "${city}"
+    Wait Until Element Is Visible  id=address1
     Input Text  name=city  ${city}
 
-Select State
-    [Arguments]  ${state}
+Select State with "${state}"
+    Wait Until Element Is Visible  id=uniform-id_state
     Select From List By Label  id=id_state  ${state}
 
-Input mobile phone
-    [Arguments]  ${mobile}
+Input mobile phone with "${mobile}"
+    Wait Until Element Is Visible  id=phone_mobile
     Input Text  name=phone_mobile  ${mobile}
 
-Input future reference.
-    [Arguments]  ${future}
+Input future reference with "${future}"
+    Wait Until Element Is Visible  id=alias
     Input Text  name=alias   ${future}
 
-Input zip code
-    [Arguments]  ${code}
+Input zip code with "${code}"
+    Wait Until Element Is Visible  id=postcode
     Input Text  name=postcode  ${code}
 
 Should show invalid email error
@@ -86,9 +94,6 @@ Should show invalid email error
 
 Should show title name with "${titleName}"
     Title Should Be    ${titleName}
-
-Should show page input information
-    Wait Until Element Contains  //*[@id="account-creation_form"]/div[1]/h3  Your personal information  
 
 Should show text error create
     Wait Until Element Contains  //*[@id="center_column"]/div/p  There are 8 errors
@@ -120,27 +125,24 @@ Create account not input in all required field
     Click button Register 
     Should show text error create
     
-Create account input all required field
+Scenario: Create account input all required field   
     Should show title name with "Login - My Store"
-    Input email    id=email_create    ${valid email}
+    Input email with "test3@today.com"
     Click button create an account
-    Set Browser Implicit Wait  15
-    Choose Title    id_gender2
-    Input firstname  sky
-    Input lastname   sky
-    Password    12345
-    Select Birthday      id=days    3
-    Select Birthday      id=months    4
-    Select Birthday    id=years    1999
+    Choose title with "2" 
+    Input firstname with "sky"
+    Input lastname with "sky"
+    Input Password with "12345"
+    Select Birthday date with "13"
+    Select Birthday month with "4"
+    Select Birthday yesr with "1999"
     Input address with "AAAAA" 
-    Input address with "AAAA" and "BBBB" 
-    Input city    BBB
-    Select State    Alabama
-    Input zip code    11111
-    Input mobile phone    012345678
-    Input future reference.    future
+    Input city with "BBBB"   
+    Select State with "Alabama"
+    Input zip code with "11111"
+    Input mobile phone with "012345678"
+    Input future reference with "future"
     Click button Register 
-    Set Browser Implicit Wait  10
     Should show title name with "My account - My Store"
 
 Create account with same email

@@ -10,11 +10,11 @@ ${titleLogin}  Login - My Store
 ${titleMyAccount}  My account - My Store
 ${invalid_email}  Invalid email address.
 ${id_error}  //*[@id="center_column"]/div/p
-${valid email}  test@today.com
+${valid email}  test1@today.com
 ${error_create}  There are 8 errors
 ${EmailAlready}  An account using this email address has already been registered. Please enter a valid password or request a new one.
 ${Locator_already}  //*[@id="create_account_error"]/ol/li
-${EmailSame}  sutfah6666@gmail.com
+
 
 *** Keywords ***
 Open url
@@ -79,7 +79,9 @@ Input future reference.
     [Arguments]  ${future}
     Input Text  name=alias   ${future}
 
-
+Input zip code
+    [Arguments]  ${code}
+    Input Text  name=postcode  ${code}
 *** Test Cases ***
 
 Create account without input email
@@ -125,6 +127,7 @@ Create account input all required field
     Input address    AAAA
     Input city    BBB
     Select State    Alabama
+    Input zip code    11111
     Input mobile phone    012345678
     Input future reference.    future
     Click button Register 
@@ -133,7 +136,7 @@ Create account input all required field
 
 Create account with same email
     Check title name    ${titleLogin}
-    Input email    id=email_create    ${EmailSame}
+    Input email    id=email_create    ${valid email}
     Click button create an account
     Wait Until Element Is Visible   ${id_create_account_error}  10
     Check message should be    ${Locator_already}  ${EmailAlready}
